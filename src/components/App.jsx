@@ -1,11 +1,11 @@
 import React from "react";
 import { moviesData } from "../moviesData";
 import MovieItem from "./MovieItem";
-import MoviesWillWatch from "./MoviesWillWatch";
-// const App = () => {
-//   return <div>Hello ReactWarriors</div>;
-// };
-// const App = new React.Component()
+// const title = "Hello ReactWarriors!";
+// console.log(moviesData);
+
+// UI = fn(state);
+
 class App extends React.Component {
   constructor() {
     super();
@@ -16,43 +16,75 @@ class App extends React.Component {
     };
   }
 
+  removeMovieById = id => {
+    const updateMovies = this.state.movies.filter(function(movie) {
+      return movie.id !== id;
+    });
+    // console.log(updateMovies.length);
+    // this.state.movies = updateMovies;
+    this.setState({
+      movies: updateMovies
+    });
+  };
+
   addMovieToWillWatch = movie => {
-    console.log(movie);
-    const updateMoviesWillWatch = [...this.state.moviesWillWatch, movie];
-    // updateMoviesWillWatch.push(movie);
+    console.log("movie", movie);
+    const updateMoviesWillWatch = [...this.state.moviesWillWatch];
+    updateMoviesWillWatch.push(movie);
     this.setState({
       moviesWillWatch: updateMoviesWillWatch
     });
   };
 
-  removeMovieToWillWatch = movie => {
-    const updateMoviesWillWatch = this.state.moviesWillWatch.filter(
-      item => item.id !== movie.id
-    );
+  removeMovieFromWillWatch = id => {
+    const updateMoviesWillWatch = this.state.moviesWillWatch.filter(function(
+      movie
+    ) {
+      return movie.id !== id;
+    });
+    // console.log(updateMovies.length);
+    // this.state.movies = updateMovies;
     this.setState({
       moviesWillWatch: updateMoviesWillWatch
     });
   };
 
   render() {
+    // console.log(this);
+    console.log("render");
     return (
       <div className="container">
         <div className="row">
           <div className="col-9">
             <div className="row">
-              {this.state.movies.map(item => (
-                <div className="col-6 mb-4" key={item.id}>
-                  <MovieItem
-                    item={item}
-                    addMovieToWillWatch={this.addMovieToWillWatch}
-                    removeMovieToWillWatch={this.removeMovieToWillWatch}
-                  />
-                </div>
-              ))}
+              {this.state.movies.map(movie => {
+                return (
+                  <div className="col-6" key={movie.id}>
+                    <MovieItem
+                      item={movie}
+                      removeMovieById={this.removeMovieById}
+                      addMovieToWillWatch={this.addMovieToWillWatch}
+                      removeMovieFromWillWatch={this.removeMovieFromWillWatch}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="col-3">
-            <MoviesWillWatch moviesWillWatch={this.state.moviesWillWatch} />
+            <p>Movies will watch: {this.state.moviesWillWatch.length}</p>
+            <ul className="list-group">
+              {this.state.moviesWillWatch.map(movie => {
+                return (
+                  <li className="list-group-item" key={movie.id}>
+                    <div className="d-flex justify-content-between">
+                      <p>{movie.title}</p>
+                      <p>{movie.vote_average}</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </div>

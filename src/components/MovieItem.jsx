@@ -1,29 +1,29 @@
 import React from "react";
 
 class MovieItem extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      willWatch: false
-    };
-  }
+  state = {
+    willWatch: false
+  };
 
   toggleWillWatch = () => {
+    const { item, removeMovieFromWillWatch, addMovieToWillWatch } = this.props;
+    if (this.state.willWatch) {
+      removeMovieFromWillWatch(item.id);
+    } else {
+      addMovieToWillWatch(item);
+    }
     this.setState({
       willWatch: !this.state.willWatch
     });
-    if (this.state.willWatch) {
-      this.props.removeMovieToWillWatch(this.props.item);
-    } else {
-      this.props.addMovieToWillWatch(this.props.item);
-    }
   };
 
   render() {
-    const { item } = this.props;
+    const { item, removeMovieById } = this.props;
+    const classNameButton = `btn ${
+      this.state.willWatch ? "btn-success" : "btn-secondary"
+    }`;
     return (
-      <div className="card" style={{ width: "100%" }}>
+      <div className="card">
         <img
           className="card-img-top"
           src={`https://image.tmdb.org/t/p/w500${item.backdrop_path ||
@@ -36,14 +36,20 @@ class MovieItem extends React.Component {
             <p className="mb-0">Rating: {item.vote_average}</p>
             <button
               type="button"
-              className={`btn ${
-                this.state.willWatch ? "btn-success" : "btn-secondary"
-              }`}
+              className={classNameButton}
               onClick={this.toggleWillWatch}
             >
               Will Watch
             </button>
           </div>
+          <button
+            type="button"
+            onClick={() => {
+              removeMovieById(this.props.item.id);
+            }}
+          >
+            Delete
+          </button>
         </div>
       </div>
     );
