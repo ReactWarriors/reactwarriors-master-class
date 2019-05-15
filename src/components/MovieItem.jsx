@@ -1,27 +1,29 @@
 import React from "react";
 
 class MovieItem extends React.Component {
-  state = {
-    willWatch: false
-  };
+  constructor() {
+    super();
 
-  toggleWillWatch = () => {
-    const { item, removeMovieFromWillWatch, addMovieToWillWatch } = this.props;
-    if (this.state.willWatch) {
-      removeMovieFromWillWatch(item.id);
-    } else {
-      addMovieToWillWatch(item);
-    }
+    this.state = {
+      willWatch: false
+    };
+  }
+
+  handleClickWillWatch = () => {
     this.setState({
       willWatch: !this.state.willWatch
     });
+    const { addMovieToWillWatch, removeMovieFromWillWatch, item } = this.props;
+    this.state.willWatch
+      ? removeMovieFromWillWatch(item.id)
+      : addMovieToWillWatch(item);
   };
 
+  getClassWillWatchButton = () =>
+    `btn ${this.state.willWatch ? "btn-success" : "btn-secondary"} mb-2`;
+
   render() {
-    const { item, removeMovieById } = this.props;
-    const classNameButton = `btn ${
-      this.state.willWatch ? "btn-success" : "btn-secondary"
-    }`;
+    const { item, removeMovie } = this.props;
     return (
       <div className="card">
         <img
@@ -34,21 +36,21 @@ class MovieItem extends React.Component {
           <h6 className="card-title">{item.title}</h6>
           <div className="d-flex justify-content-between align-items-center">
             <p className="mb-0">Rating: {item.vote_average}</p>
-            <button
-              type="button"
-              className={classNameButton}
-              onClick={this.toggleWillWatch}
-            >
-              Will Watch
-            </button>
           </div>
           <button
             type="button"
+            className={this.getClassWillWatchButton()}
+            onClick={this.handleClickWillWatch}
+          >
+            Will Watch
+          </button>
+          <button
+            type="button"
             onClick={() => {
-              removeMovieById(this.props.item.id);
+              removeMovie(item.id);
             }}
           >
-            Delete
+            Delete movie
           </button>
         </div>
       </div>
