@@ -9,21 +9,19 @@ class MovieItem extends React.Component {
     };
   }
 
-  handleClickWillWatch = () => {
+  handeClickWatch = () => {
     this.setState({
       willWatch: !this.state.willWatch
     });
-    const { addMovieToWillWatch, removeMovieFromWillWatch, item } = this.props;
-    this.state.willWatch
-      ? removeMovieFromWillWatch(item.id)
-      : addMovieToWillWatch(item);
+    if (this.state.willWatch) {
+      this.props.deleteMovieFromWillWatch(this.props.item.id);
+    } else {
+      this.props.addMovieToWillWatch(this.props.item);
+    }
   };
 
-  getClassWillWatchButton = () =>
-    `btn ${this.state.willWatch ? "btn-success" : "btn-secondary"} mb-2`;
-
   render() {
-    const { item, removeMovie } = this.props;
+    const { item, deleteMovie } = this.props;
     return (
       <div className="card">
         <img
@@ -36,21 +34,19 @@ class MovieItem extends React.Component {
           <h6 className="card-title">{item.title}</h6>
           <div className="d-flex justify-content-between align-items-center">
             <p className="mb-0">Rating: {item.vote_average}</p>
+            <button
+              type="button"
+              className={`btn ${
+                this.state.willWatch ? "btn-success" : "btn-secondary"
+              }`}
+              onClick={this.handeClickWatch}
+              // onClick={addMovieToWillWatch.bind(null, item)}
+            >
+              Will Watch
+            </button>
           </div>
-          <button
-            type="button"
-            className={this.getClassWillWatchButton()}
-            onClick={this.handleClickWillWatch}
-          >
-            Will Watch
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              removeMovie(item.id);
-            }}
-          >
-            Delete movie
+          <button type="button" onClick={deleteMovie.bind(null, item.id)}>
+            Delete
           </button>
         </div>
       </div>

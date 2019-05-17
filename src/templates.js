@@ -1,5 +1,5 @@
 // MovieItem
-// <div className="card" style={{ width: "100%" }}>
+// <div className="card">
 //   <img
 //     className="card-img-top"
 //     src={`https://image.tmdb.org/t/p/w500${item.backdrop_path ||
@@ -12,8 +12,7 @@
 //       <p className="mb-0">Rating: {item.vote_average}</p>
 //       <button
 //         type="button"
-//         className="btn btn-success"
-//         onClick={this.changeWillWatch}
+//         className="btn btn-secondary"
 //       >
 //         Will Watch
 //       </button>
